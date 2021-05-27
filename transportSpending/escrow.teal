@@ -1,0 +1,53 @@
+#pragma version 2
+txn TypeEnum
+int axfer
+==
+txn AssetAmount
+int 0
+==
+&&
+txn Sender
+txn AssetReceiver
+==
+&&
+txn XferAsset
+int 14967831
+==
+&&
+txn TypeEnum
+int axfer
+==
+txn XferAsset
+int 14967831
+==
+&&
+txn Fee
+int 1000
+<=
+&&
+txn AssetCloseTo
+global ZeroAddress
+==
+&&
+txn AssetSender
+global ZeroAddress
+==
+&&
+txn Receiver
+addr I3WYMLEMCAGJHLXNYCNH723WKGTITPKLXFOMEXSWQP5XOHYYYXBPAHJ56Q
+==
+arg 0
+sha256
+byte base32(2323232323232323)
+==
+&&
+txn Receiver
+addr T5HO4K4RAPASDATFJRTPW66ADGOGSR6DPTPI6PGH54KVV76NYCH7LB4NUE
+==
+txn FirstValid
+int 3000
+>
+&&
+||
+&&
+||

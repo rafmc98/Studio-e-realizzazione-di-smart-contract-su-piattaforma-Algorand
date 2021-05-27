@@ -1,0 +1,76 @@
+#pragma version 2
+global GroupSize
+int 2
+==
+bnz l0
+txn TypeEnum
+int axfer
+==
+txn AssetAmount
+int 0
+==
+&&
+txn Sender
+txn AssetReceiver
+==
+&&
+txn XferAsset
+int 14531028
+==
+&&
+b l1
+l0:
+gtxn 0 AssetReceiver
+gtxn 1 Sender
+==
+gtxn 0 TypeEnum
+int axfer
+==
+&&
+gtxn 0 XferAsset
+int 14531028
+==
+&&
+gtxn 0 Fee
+int 1000
+<=
+&&
+gtxn 0 AssetCloseTo
+global ZeroAddress
+==
+&&
+gtxn 0 AssetSender
+global ZeroAddress
+==
+&&
+gtxn 1 TypeEnum
+int pay
+==
+&&
+gtxn 1 Amount
+gtxn 0 AssetAmount
+int 100000
+*
+==
+&&
+gtxn 1 Fee
+int 1000
+<=
+&&
+gtxn 1 Receiver
+addr ROV6LJIUDCSQEVX2AU7CWGOEZT2DQJUDLOYUP56MQGKVI2ECZXNUSUDOLU
+==
+&&
+gtxn 1 RekeyTo
+global ZeroAddress
+==
+&&
+gtxn 1 AssetCloseTo
+global ZeroAddress
+==
+&&
+gtxn 1 CloseRemainderTo
+global ZeroAddress
+==
+&&
+l1:

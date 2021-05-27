@@ -1,0 +1,19 @@
+#pragma version 2
+int 0
+global CurrentApplicationID
+byte "recycle_counter"
+app_local_get_ex
+store 0
+store 1
+byte "tot_recycle_counter"
+byte "tot_recycle_counter"
+app_global_get
+load 1
+-
+app_global_put
+int 0
+byte "recycle_counter"
+int 0
+app_local_put
+int 1
+return

@@ -1,0 +1,144 @@
+#pragma version 2
+arg 1
+btoi
+int 0
+>=
+arg 1
+btoi
+int 10
+<=
+&&
+gtxn 0 AssetAmount
+int 1
+arg 2
+btoi
+*
+==
+&&
+arg 1
+btoi
+int 11
+>=
+arg 1
+btoi
+int 50
+<=
+&&
+gtxn 0 AssetAmount
+int 2
+arg 2
+btoi
+*
+==
+&&
+||
+arg 1
+btoi
+int 51
+>=
+arg 1
+btoi
+int 100
+<=
+&&
+gtxn 0 AssetAmount
+int 3
+arg 2
+btoi
+*
+==
+&&
+||
+arg 1
+btoi
+int 101
+>=
+arg 1
+btoi
+int 200
+<=
+&&
+gtxn 0 AssetAmount
+int 4
+arg 2
+btoi
+*
+==
+&&
+||
+arg 1
+btoi
+int 201
+>=
+gtxn 0 AssetAmount
+int 5
+arg 2
+btoi
+*
+==
+&&
+||
+gtxn 0 TypeEnum
+int axfer
+==
+gtxn 0 XferAsset
+int 14531028
+==
+&&
+gtxn 0 AssetAmount
+int 25
+<=
+&&
+gtxn 0 AssetSender
+addr ROV6LJIUDCSQEVX2AU7CWGOEZT2DQJUDLOYUP56MQGKVI2ECZXNUSUDOLU
+==
+&&
+gtxn 0 RekeyTo
+global ZeroAddress
+==
+&&
+gtxn 0 AssetCloseTo
+global ZeroAddress
+==
+&&
+gtxn 0 CloseRemainderTo
+global ZeroAddress
+==
+&&
+gtxn 0 Fee
+int 1000
+<=
+&&
+gtxn 1 TypeEnum
+int appl
+==
+&&
+gtxn 1 Sender
+gtxn 0 AssetReceiver
+==
+&&
+gtxn 1 ApplicationID
+int 14877441
+==
+&&
+gtxna 1 ApplicationArgs 0
+byte "update_recycle_value"
+==
+&&
+&&
+arg 0
+byte base64(MTc5OTkxMg==)
+==
+arg 0
+byte base64(YWJjZA==)
+==
+||
+arg 0
+byte base64(MTIzNA==)
+==
+||
+arg 0
+byte base64(MDAwMA==)
+==
+||
+&&

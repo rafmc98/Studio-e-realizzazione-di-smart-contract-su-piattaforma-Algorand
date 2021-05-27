@@ -1,0 +1,171 @@
+#pragma version 2
+txn ApplicationID
+int 0
+==
+bnz l0
+txn OnCompletion
+int DeleteApplication
+==
+bnz l1
+txn OnCompletion
+int UpdateApplication
+==
+bnz l2
+txn OnCompletion
+int OptIn
+==
+bnz l3
+txna ApplicationArgs 0
+byte "update_recycle_counter"
+==
+txn NumAppArgs
+int 2
+==
+&&
+bnz l4
+txna ApplicationArgs 0
+byte "check_user_counter"
+==
+bnz l5
+err
+l0:
+byte "Creator"
+txn Sender
+app_global_put
+byte "tot_recycle_counter"
+int 0
+app_global_put
+byte "recyclibility_level_1"
+int 0
+app_global_put
+byte "recyclibility_level_2"
+int 0
+app_global_put
+byte "recyclibility_level_3"
+int 0
+app_global_put
+byte "recyclibility_level_4"
+int 0
+app_global_put
+byte "recyclibility_level_5"
+int 0
+app_global_put
+int 1
+return
+b l6
+l1:
+txn Sender
+byte "Creator"
+app_global_get
+==
+return
+b l6
+l2:
+txn Sender
+byte "Creator"
+app_global_get
+==
+return
+b l6
+l3:
+int 0
+byte "recycle_counter"
+int 0
+app_local_put
+int 1
+return
+b l6
+l4:
+int 0
+global CurrentApplicationID
+byte "recycle_counter"
+app_local_get_ex
+store 0
+store 1
+byte "tot_recycle_counter"
+byte "tot_recycle_counter"
+app_global_get
+int 1
++
+app_global_put
+txna ApplicationArgs 0
+byte "1"
+==
+bz l7
+byte "recyclibility_level_1"
+byte "recyclibility_level_1"
+app_global_get
+int 1
++
+app_global_put
+l7:
+txna ApplicationArgs 0
+byte "2"
+==
+bz l8
+byte "recyclibility_level_2"
+byte "recyclibility_level_2"
+app_global_get
+int 1
++
+app_global_put
+l8:
+txna ApplicationArgs 0
+byte "3"
+==
+bz l9
+byte "recyclibility_level_3"
+byte "recyclibility_level_3"
+app_global_get
+int 1
++
+app_global_put
+l9:
+txna ApplicationArgs 0
+byte "4"
+==
+bz l10
+byte "recyclibility_level_4"
+byte "recyclibility_level_4"
+app_global_get
+int 1
++
+app_global_put
+l10:
+txna ApplicationArgs 0
+byte "5"
+==
+bz l11
+byte "recyclibility_level_5"
+byte "recyclibility_level_5"
+app_global_get
+int 1
++
+app_global_put
+l11:
+int 0
+byte "recycle_counter"
+load 1
+int 1
++
+app_local_put
+int 1
+return
+b l6
+l5:
+int 0
+global CurrentApplicationID
+byte "recycle_counter"
+app_local_get_ex
+store 0
+store 1
+load 1
+int 10
+>=
+bz l12
+int 1
+return
+l12:
+int 0
+return
+l6:
