@@ -1,6 +1,7 @@
 import base64
 import json
 import datetime
+import time
 from getpass import getpass
 from algosdk.future import transaction
 from algosdk import account, mnemonic
@@ -11,7 +12,7 @@ from algosdk.account import address_from_private_key
 
 
 # user wallet
-user_mnemonic = "skate episode loop witness spare wish shoot symptom need veteran hurdle start fancy smooth innocent now sheriff scheme distance solution core future engage abstract same"
+user_mnemonic = "laugh trade skull buyer purpose rescue enforce source hat panic reflect coach dial fiber body want south ivory viable bracket someone embody canoe above erosion"
 
 # creator wallet
 creator_mnemonic = "sniff install spin license casino unable fly build purity soldier ability baby praise nut ripple ethics math maze palm certain illness cart jaguar ability fame"
@@ -21,6 +22,7 @@ creator_mnemonic = "sniff install spin license casino unable fly build purity so
 algod_address = "http://localhost:4001"
 algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 
+f = open("times.txt", "w")
 
 # helper function to compile program source
 def compile_program(client, source_code):
@@ -33,7 +35,7 @@ def get_private_key_from_mnemonic(mn):
     return private_key
 
 # helper function that waits for a given txid to be confirmed by the network
-def wait_for_confirmation(client, txid):
+def wait_for_confirmation(client, txid, start_time):
     last_round = client.status().get('last-round')
     txinfo = client.pending_transaction_info(txid)
     while not (txinfo.get('confirmed-round') and txinfo.get('confirmed-round') > 0):
@@ -41,6 +43,8 @@ def wait_for_confirmation(client, txid):
         last_round += 1
         client.status_after_block(last_round)
         txinfo = client.pending_transaction_info(txid)
+    #print("Tempo accettazione transazione:", time.time() - start_time)
+    f.write("\n" + str(time.time() - start_time))
     print("Transaction {} confirmed in round {}.".format(txid, txinfo.get('confirmed-round')))
     return txinfo
 
@@ -127,20 +131,24 @@ def execute_txn(client, private_key, app_id):
     stxn_0 = LogicSigTransaction(txn_0, lsig)
     stxn_1 = txn_1.sign(private_key)
 
+
+    # start time
+    start_time = time.time()
+
     # send transaction
     tx_id = client.send_transactions([stxn_0, stxn_1])
 
     # wait confirmation
-    wait_for_confirmation(client, tx_id)
+    wait_for_confirmation(client, tx_id, start_time)
 
-    # display confirmed transaction group
+    '''# display confirmed transaction group
     # tx1
     confirmed_txn = client.pending_transaction_info(txn_0.get_txid())
     print("Transaction information: {}".format(json.dumps(confirmed_txn, indent=4)))
 
     # tx2
     confirmed_txn = client.pending_transaction_info(txn_1.get_txid())
-    print("Transaction information: {}".format(json.dumps(confirmed_txn, indent=4)))
+    print("Transaction information: {}".format(json.dumps(confirmed_txn, indent=4)))'''
 
 
 def format_state(state):
@@ -199,7 +207,7 @@ def main():
     # call function to generate transactions
     execute_txn(algod_client, user_private_key, app_id)  
 
-    print()
+    '''print()
 
     # read global state of application
     print("Global state:", read_global_state(algod_client, address_from_private_key(creator_private_key), app_id))
@@ -207,7 +215,7 @@ def main():
     print()
 
     # read local state of application from user account
-    print("Local state:", read_local_state(algod_client, address_from_private_key(user_private_key), app_id))
+    print("Local state:", read_local_state(algod_client, address_from_private_key(user_private_key), app_id))'''
 
 
 
@@ -215,4 +223,6 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    for x in range(1,10):
+        main()
+    f.close()

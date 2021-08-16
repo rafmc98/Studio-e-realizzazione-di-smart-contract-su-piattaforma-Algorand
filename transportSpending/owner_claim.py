@@ -1,5 +1,6 @@
 import json
 import base64
+import time
 from hashlib import sha256
 from getpass import getpass
 from algosdk.v2client import algod
@@ -18,7 +19,7 @@ algod_client = algod.AlgodClient(algod_token=algod_token, algod_address=algod_ad
 user_addr = "T5HO4K4RAPASDATFJRTPW66ADGOGSR6DPTPI6PGH54KVV76NYCH7LB4NUE"
 
 # Function that waits for a given txId to be confirmed by the network
-def wait_for_confirmation(txid):
+def wait_for_confirmation(txid, start_time):
     """
     Utility function to wait until the transaction is
     confirmed before proceeding.
@@ -30,7 +31,8 @@ def wait_for_confirmation(txid):
         last_round += 1
         algod_client.status_after_block(last_round)
         txinfo = algod_client.pending_transaction_info(txid)
-    print("Transaction {} confirmed in round {}.".format(txid, txinfo.get('confirmed-round')))
+    print("Tempo accettazione transazione:", time.time() - start_time)
+    #print("Transaction {} confirmed in round {}.".format(txid, txinfo.get('confirmed-round')))
     return txinfo
 
 
@@ -48,9 +50,11 @@ def owner_claim():
     t = programstr.encode()
     # program = b"hex-encoded-program"
     program = base64.decodebytes(t)
-            
+
+    arg = "ctr".encode()
+     
     # create LogicSig
-    lsig = LogicSig(program)
+    lsig = LogicSig(program, args = [arg])
    
     # define sender
     snd = lsig.address()
@@ -74,15 +78,14 @@ def owner_claim():
 
     # send raw LogicSigTransaction to network
     txid = algod_client.send_transaction(lstx)
-    print("Transaction ID: " + txid)
+    #print("Transaction ID: " + txid)
     
     # wait for the transaction to be confirmed
-    confirmed_txn = wait_for_confirmation(txid)
+    confirmed_txn = wait_for_confirmation(txid, time.time())
     
     print()
     
-    print("Transaction information: {}".format(
-        json.dumps(confirmed_txn, indent=4)))
+    #print("Transaction information: {}".format(json.dumps(confirmed_txn, indent=4)))
 
 owner_claim()
 

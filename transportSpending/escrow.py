@@ -1,3 +1,4 @@
+import base64
 from pyteal import *
 
 # user address
@@ -7,15 +8,14 @@ owner = Addr("T5HO4K4RAPASDATFJRTPW66ADGOGSR6DPTPI6PGH54KVV76NYCH7LB4NUE")
 rcv = Addr("I3WYMLEMCAGJHLXNYCNH723WKGTITPKLXFOMEXSWQP5XOHYYYXBPAHJ56Q")
 
 # secret word to receiver closeOut 
-secret = Bytes("base32", "2323232323232323")
+secret = Bytes("base64", str(base64.b64encode('2323232323232323'.encode()), 'utf-8'))
 
 # timeout time to owner closeOut
-timeout = "<Round Timeout>"
+timeout = 14915418
 
 def htlc(tmpl_owner = owner,
              tmpl_receiver = rcv,
              tmpl_secret = secret,
-             tmpl_hash_fn = Sha256,
              tmpl_timeout = timeout):
 
     # conditions to check if the transaction type is Opt-in
@@ -30,7 +30,6 @@ def htlc(tmpl_owner = owner,
     # general safety conditions
     safety_cond = And(
         Txn.type_enum() == TxnType.AssetTransfer,
-        Txn.xfer_asset() == Int(14967831),
         Txn.fee() <= Int(1000),
         Txn.asset_close_to() == Global.zero_address(),
         Txn.asset_sender() == Global.zero_address(),
@@ -39,7 +38,7 @@ def htlc(tmpl_owner = owner,
     # receiver conditions to closeOut 
     receiver_cond = And(
         Txn.receiver() == tmpl_receiver,
-        tmpl_hash_fn(Arg(0)) == tmpl_secret
+        Arg(0) == tmpl_secret
     )
 
     # owner conditions to closeOut
@@ -48,15 +47,24 @@ def htlc(tmpl_owner = owner,
         Txn.first_valid() > Int(tmpl_timeout)
     )
 
-    # define the program
-    return Or(
-        optIn,
-        And(safety_cond,Or(receiver_cond, owner_cond))
-    )
+    program = If(Txn.sender() == Txn.receiver(),
+                    optIn,
+                    And(
+                        safety_cond,
+                        Or(
+                            owner_cond,
+                            receiver_cond
+                        )
+                    )
+                )
+    return program
+
+    
+
 
 
 if __name__ == "__main__":
-    with open('transportSpending/spending.teal', 'w') as f:
+    with open('transportSpending/escrow.teal', 'w') as f:
         compiled = compileTeal(htlc(), Mode.Signature)
         f.write(compiled)
 

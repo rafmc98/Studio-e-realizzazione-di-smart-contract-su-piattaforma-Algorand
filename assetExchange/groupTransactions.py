@@ -12,7 +12,7 @@ from algosdk.testing import dryrun
 from algosdk.v2client.models import DryrunRequest, DryrunSource
 
 # user declared account mnemonics for account1 and account2
-user_mnemonic = "skate episode loop witness spare wish shoot symptom need veteran hurdle start fancy smooth innocent now sheriff scheme distance solution core future engage abstract same"
+user_mnemonic = "laugh trade skull buyer purpose rescue enforce source hat panic reflect coach dial fiber body want south ivory viable bracket someone embody canoe above erosion"
 
 # user declared algod connection parameters
 algod_address = "http://localhost:4001"
@@ -23,7 +23,7 @@ algod_client = algod.AlgodClient(algod_token, algod_address)
 
 
 # Function that waits for a given txId to be confirmed by the network
-def wait_for_confirmation(client, txid):
+def wait_for_confirmation(client, txid, start_time):
     last_round = client.status().get('last-round')
     txinfo = client.pending_transaction_info(txid)
     while not (txinfo.get('confirmed-round') and txinfo.get('confirmed-round') > 0):
@@ -31,7 +31,8 @@ def wait_for_confirmation(client, txid):
         last_round += 1
         client.status_after_block(last_round)
         txinfo = client.pending_transaction_info(txid)
-    print("Transaction {} confirmed in round {}.".format(txid, txinfo.get('confirmed-round')))
+    print("Tempo accettazione transazione:", time.time() - start_time)
+    #print("Transaction {} confirmed in round {}.".format(txid, txinfo.get('confirmed-round')))
     return txinfo
 
 
@@ -50,8 +51,8 @@ def group_transactions() :
         data = open("assetExchange/assetExchange.teal", 'r').read()
         # compile TEAL program
         response = algod_client.compile(data)
-        print("Response Result = ", response['result'])
-        print("Response Hash = ", response['hash'])
+        #print("Response Result = ", response['result'])
+        #print("Response Hash = ", response['hash'])
     
         programstr = response['result']
         t = programstr.encode()
@@ -104,22 +105,21 @@ def group_transactions() :
         
         # assemble transaction group
         signed_group = [stxn_0, stxn_1]
-        #transaction.write_to_file([stxn_0, stxn_1], "./signed.stxn")
-
+        
         # send transactions
         tx_id = algod_client.send_transactions(signed_group)
 
         # wait for confirmation
-        wait_for_confirmation(algod_client, tx_id) 
+        wait_for_confirmation(algod_client, tx_id, time.time()) 
 
-        # display confirmed transaction group
+        '''# display confirmed transaction group
         # tx1
         confirmed_txn = algod_client.pending_transaction_info(txn_0.get_txid())
         print("Transaction information: {}".format(json.dumps(confirmed_txn, indent=4)))
 
         # tx2
         confirmed_txn = algod_client.pending_transaction_info(txn_1.get_txid())
-        print("Transaction information: {}".format(json.dumps(confirmed_txn, indent=4)))
+        print("Transaction information: {}".format(json.dumps(confirmed_txn, indent=4)))'''
     
     
     except Exception as e:

@@ -1,5 +1,5 @@
 import base64
-import * from pyteal
+from pyteal import *
 
 asset_id = Int(14531028)
 secret_code = [ Bytes("base64", str(base64.b64encode('1799912'.encode()), 'utf-8')),
