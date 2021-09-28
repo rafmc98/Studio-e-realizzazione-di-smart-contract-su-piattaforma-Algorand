@@ -6,7 +6,7 @@ def assetExchange():
     optIn = And(
         Txn.type_enum() == TxnType.AssetTransfer,
         Txn.asset_amount() == Int(0),
-        Txn.sender()  == Txn.asset_receiver(),
+        Txn.sender() == Txn.asset_receiver(),
         # <ID MetroAsset>
         Txn.xfer_asset() == Int(14638139)
     )
@@ -14,7 +14,6 @@ def assetExchange():
     # conditions to check the asset exchange transactions fields 
     controls = And(
         Gtxn[0].asset_receiver() == Gtxn[1].sender(),
-
         Gtxn[0].type_enum() == TxnType.AssetTransfer,
         # <ID MetroAsset>
         Gtxn[0].xfer_asset() == Int(14638139),
@@ -41,9 +40,6 @@ def assetExchange():
 
 
 if __name__ == "__main__":
-    with open('assetExchange/assetExchange.teal', 'w') as f:
+    with open('MetroEcoExchange/MetroEcoExchange.teal', 'w') as f:
         compiled = compileTeal(assetExchange(), Mode.Signature)
         f.write(compiled)
-
-
-    

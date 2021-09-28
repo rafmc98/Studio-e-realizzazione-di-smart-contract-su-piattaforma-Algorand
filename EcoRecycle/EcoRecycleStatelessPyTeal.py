@@ -56,6 +56,6 @@ def premioRiciclo( asset_id = asset_id,
     return And(amount_controls, controls, sec_control)
 
 if __name__ == "__main__":
-    with open('ricicloRifiuti/ricycleStateless.teal', 'w') as f:
+    with open('EcoRecycle/EcoRecycleContract.teal', 'w') as f:
         compiled = compileTeal(premioRiciclo(), Mode.Signature)
         f.write(compiled)

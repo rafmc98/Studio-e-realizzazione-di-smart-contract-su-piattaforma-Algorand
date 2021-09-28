@@ -40,7 +40,7 @@ def wait_for_confirmation(txid, start_time):
 # function to creat the receiver claim transaction
 def receiver_claim():
     # read TEAL program
-    data = open("transportSpending/escrow.teal", 'r').read()
+    data = open("SpendingTran/escrow.teal", 'r').read()
     # compile TEAL program
     response = algod_client.compile(data)
     print("Response Result = ", response['result'])

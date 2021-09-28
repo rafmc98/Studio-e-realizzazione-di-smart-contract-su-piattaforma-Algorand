@@ -64,7 +64,7 @@ def htlc(tmpl_owner = owner,
 
 
 if __name__ == "__main__":
-    with open('transportSpending/escrow.teal', 'w') as f:
+    with open('SpendingTran/escrow.teal', 'w') as f:
         compiled = compileTeal(htlc(), Mode.Signature)
         f.write(compiled)
 

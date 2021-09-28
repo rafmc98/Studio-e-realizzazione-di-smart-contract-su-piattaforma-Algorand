@@ -19,7 +19,7 @@ algod_client = algod.AlgodClient(algod_token=algod_token, algod_address=algod_ad
 user_addr = "T5HO4K4RAPASDATFJRTPW66ADGOGSR6DPTPI6PGH54KVV76NYCH7LB4NUE"
 
 # Function that waits for a given txId to be confirmed by the network
-def wait_for_confirmation(txid, start_time):
+def wait_for_confirmation(txid):
     """
     Utility function to wait until the transaction is
     confirmed before proceeding.
@@ -31,15 +31,14 @@ def wait_for_confirmation(txid, start_time):
         last_round += 1
         algod_client.status_after_block(last_round)
         txinfo = algod_client.pending_transaction_info(txid)
-    print("Tempo accettazione transazione:", time.time() - start_time)
-    #print("Transaction {} confirmed in round {}.".format(txid, txinfo.get('confirmed-round')))
+    print("Transaction {} confirmed in round {}.".format(txid, txinfo.get('confirmed-round')))
     return txinfo
 
 
 # function to create the owner claim transaction
 def owner_claim():
     # read TEAL program
-    data = open("transportSpending/escrow.teal", 'r').read()
+    data = open("SpendingTran/escrow.teal", 'r').read()
     # compile TEAL program
     response = algod_client.compile(data)
     print("Response Result = ", response['result'])
@@ -78,14 +77,13 @@ def owner_claim():
 
     # send raw LogicSigTransaction to network
     txid = algod_client.send_transaction(lstx)
-    #print("Transaction ID: " + txid)
-    
+
     # wait for the transaction to be confirmed
-    confirmed_txn = wait_for_confirmation(txid, time.time())
+    confirmed_txn = wait_for_confirmation(txid)
     
     print()
     
-    #print("Transaction information: {}".format(json.dumps(confirmed_txn, indent=4)))
+    print("Transaction information: {}".format(json.dumps(confirmed_txn, indent=4)))
 
 owner_claim()
 

@@ -46,6 +46,6 @@ def transportExchange():
     return program
 
 if __name__ == "__main__":
-    with open('transportAssetExchange/transportStateless.teal', 'w') as f:
+    with open('TranEcoExchange/TranEcoExchangeContract.teal', 'w') as f:
         compiled = compileTeal(transportExchange(), Mode.Signature)
         f.write(compiled)

@@ -89,11 +89,11 @@ def clear_state_program():
     return program
 
 # open and compile approval_program
-with open('ricicloRifiuti/approval.teal', 'w') as f:
+with open('EcoRecycle/approval.teal', 'w') as f:
     compiled = compileTeal(approval_program(), Mode.Application)
     f.write(compiled)
 
 # open and compile clear_state_program
-with open('ricicloRifiuti/clear_state.teal', 'w') as f:
+with open('EcoRecycle/clear_state.teal', 'w') as f:
     compiled = compileTeal(clear_state_program(), Mode.Application)
     f.write(compiled)

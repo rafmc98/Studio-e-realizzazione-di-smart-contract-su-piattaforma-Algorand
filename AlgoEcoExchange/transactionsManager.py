@@ -23,7 +23,7 @@ algod_client = algod.AlgodClient(algod_token, algod_address)
 
 
 # Function that waits for a given txId to be confirmed by the network
-def wait_for_confirmation(client, txid, start_time):
+def wait_for_confirmation(client, txid):
     last_round = client.status().get('last-round')
     txinfo = client.pending_transaction_info(txid)
     while not (txinfo.get('confirmed-round') and txinfo.get('confirmed-round') > 0):
@@ -31,8 +31,7 @@ def wait_for_confirmation(client, txid, start_time):
         last_round += 1
         client.status_after_block(last_round)
         txinfo = client.pending_transaction_info(txid)
-    print("Tempo accettazione transazione:", time.time() - start_time)
-    #print("Transaction {} confirmed in round {}.".format(txid, txinfo.get('confirmed-round')))
+    print("Transaction {} confirmed in round {}.".format(txid, txinfo.get('confirmed-round')))
     return txinfo
 
 
@@ -48,15 +47,16 @@ def exchange() :
     # get user address
     user = get_address(user_mnemonic)
     # read TEAL program
-    data = open("algo_to_eco/exchangeAlgo.teal", 'r').read()
+    data = open("AlgoEcoExchange/AlgoEcoExchangeContract.teal", 'r').read()
     # compile TEAL program
     response = algod_client.compile(data)
-    #print("Response Result = ", response['result'])
+    print("Response Result = ", response['result'])
     print("Response Hash = ", response['hash'])
 
     # get the program string
     programstr = response['result']
     t = programstr.encode()
+
     # program = b"hex-encoded-program"
     program = base64.decodebytes(t)
 
@@ -112,22 +112,22 @@ def exchange() :
     
     # assemble transaction group
     signed_group = [stxn_0, stxn_1]
-    #transaction.write_to_file([stxn_0, stxn_1], "./signed.stxn")
+
 
     # send transactions
     tx_id = algod_client.send_transactions(signed_group)
 
     # wait for confirmation
-    wait_for_confirmation(algod_client, tx_id, time.time()) 
+    wait_for_confirmation(algod_client, tx_id)
 
-    '''# display confirmed transaction group
+    # display confirmed transaction group
     # tx1
     confirmed_txn = algod_client.pending_transaction_info(txn_0.get_txid())
     print("Transaction information: {}".format(json.dumps(confirmed_txn, indent=4)))
 
     # tx2
     confirmed_txn = algod_client.pending_transaction_info(txn_1.get_txid())
-    print("Transaction information: {}".format(json.dumps(confirmed_txn, indent=4)))'''
+    print("Transaction information: {}".format(json.dumps(confirmed_txn, indent=4)))
 
 
 exchange()

@@ -3,16 +3,16 @@ from pyteal import *
 
 def algo_to_asset():
 
-    # condition to check if transaction is of type Opt-In
+    # condition to check if transaction type is Opt-In
     optIn = And(
         Txn.type_enum() == TxnType.AssetTransfer,
         Txn.asset_amount() == Int(0),
-        Txn.sender()  == Txn.asset_receiver(),
+        Txn.sender() == Txn.asset_receiver(),
         # <ID EcoAsset>
         Txn.xfer_asset() == Int(14531028)
     )
 
-    #  conditions to check the exchange transactions fields
+    # conditions to check the exchange transactions fields
     controls = And(
         Gtxn[0].asset_receiver() == Gtxn[1].sender(),
 
@@ -40,7 +40,7 @@ def algo_to_asset():
 
 
 if __name__ == "__main__":
-    with open('algo_to_eco/exchangeAlgo.teal', 'w') as f:
+    with open('AlgoEcoExchange/AlgoEcoExchangeContract.teal', 'w') as f:
         compiled = compileTeal(algo_to_asset(), Mode.Signature)
         f.write(compiled)
 

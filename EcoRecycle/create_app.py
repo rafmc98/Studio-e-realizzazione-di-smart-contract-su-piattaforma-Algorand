@@ -89,12 +89,12 @@ def main():
     local_schema = transaction.StateSchema(local_ints, local_bytes)
 
      # get Teal approval program
-    approval_program_teal = open("ricicloRifiuti/approval.teal", 'r').read()
+    approval_program_teal = open("EcoRecycle/approval.teal", 'r').read()
     # compile program to binary
     approval_program_compiled = compile_program(algod_client, approval_program_teal)
 
     # get PyTeal clear state program
-    clear_state_program_teal = open("ricicloRifiuti/clear_state.teal", 'r').read()
+    clear_state_program_teal = open("EcoRecycle/clear_state.teal", 'r').read()
     # compile program to binary
     clear_state_program_compiled = compile_program(algod_client, clear_state_program_teal)
 
