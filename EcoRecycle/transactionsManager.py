@@ -22,7 +22,6 @@ creator_mnemonic = "sniff install spin license casino unable fly build purity so
 algod_address = "http://localhost:4001"
 algod_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 
-f = open("times.txt", "w")
 
 # helper function to compile program source
 def compile_program(client, source_code):
