@@ -34,7 +34,7 @@ def get_private_key_from_mnemonic(mn):
     return private_key
 
 # helper function that waits for a given txid to be confirmed by the network
-def wait_for_confirmation(client, txid, start_time):
+def wait_for_confirmation(client, txid):
     last_round = client.status().get('last-round')
     txinfo = client.pending_transaction_info(txid)
     while not (txinfo.get('confirmed-round') and txinfo.get('confirmed-round') > 0):
